@@ -28,7 +28,7 @@ class Database {
         return true
     }
 
-    async cadastra(heroi){
+    async cadastra(heroi) {
         const dados = await this.obterDadsArquivo()
         const id = heroi.id <= 2 ? heroi.id : Date.now();
         /**
@@ -48,7 +48,7 @@ class Database {
          * }
          */
         const heroiComId = {
-            id, 
+            id,
             ...heroi
         }
 
@@ -73,10 +73,10 @@ class Database {
          *  nome: Batman
          * }
          * ]
-         *  */ 
+         *  */
 
-         const resultado = await this.escreverArquivo(dadosFinal)
-         return resultado;
+        const resultado = await this.escreverArquivo(dadosFinal)
+        return resultado;
     }
 
     async listar(id) {
@@ -85,6 +85,19 @@ class Database {
         const dados = await this.obterDadsArquivo()
         const dadosFiltrados = dados.filter(item => (id ? (item.id === id) : true))
         return dadosFiltrados
+    }
+
+    async remover(id) {
+        if(!id){
+            return await this.escreverArquivo([])
+        }
+        const dados = await this.obterDadsArquivo()
+        const indice = dados.findIndex(item => item.id === parseInt(id))
+        if(indice === -1){
+            throw Error('O usuario informado não existe')
+        }
+        dados.splice(indice,1)        
+        return await this.escreverArquivo(dados)
     }
 }
 

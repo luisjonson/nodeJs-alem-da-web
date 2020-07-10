@@ -29,4 +29,11 @@ describe('Suite de manipulação de Herois', () => {
         const actual = await database.listar(DEFAULT_ITEM_CADASTRAR.id)
         ok(actual, expected)
     })
+
+    // estrutura de teste bbasica com mocha
+    it('deve remover um heroi por id ', async ()=>{
+        const expected = true;
+        const resultado = await database.remover(DEFAULT_ITEM_CADASTRAR.id)
+        deepEqual(resultado, expected)
+    })
 })
