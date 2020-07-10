@@ -13,6 +13,9 @@ const DEFAULT_ITEM_CADASTRAR = {
 
 // inicializando uma swit de teste 
 describe('Suite de manipulação de Herois', () => {
+    before(async()=>{
+        await database.cadastra(DEFAULT_ITEM_CADASTRAR)
+    })
     it('deve pesquisa um heroi usando um arquivo', async () => {
         const expected = DEFAULT_ITEM_CADASTRAR
         const [resultado] = await database.listar(expected.id)
@@ -20,8 +23,10 @@ describe('Suite de manipulação de Herois', () => {
 
         deepEqual(resultado, expected)
     })
-    // it('deve cadastra um heroi, usando arquivos', async () => {
-    //     const expected = DEFAULT_ITEM_CADASTRAR
-    //     ok(null, expected)
-    // })
+    it('deve cadastra um heroi, usando arquivos', async () => {
+        const expected = DEFAULT_ITEM_CADASTRAR
+        const resultado = await database.cadastra(DEFAULT_ITEM_CADASTRAR)
+        const actual = await database.listar(DEFAULT_ITEM_CADASTRAR.id)
+        ok(actual, expected)
+    })
 })

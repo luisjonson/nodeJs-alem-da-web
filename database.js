@@ -1,12 +1,16 @@
 const {
-    readFile
+    readFile,
+    writeFile
 } = require('fs')
 
 const {
     promisify
 } = require('util')
 
+// tranformando readFile e WriteFile em promise com promisify, para manipular
+//  os arquivo com async e await.
 const readFileAsync = promisify(readFile)
+const writeFileAsync = promisify(writeFile)
 
 class Database {
     constructor() {
@@ -18,8 +22,61 @@ class Database {
 
     }
 
-    escreverArquivo() {
+    async escreverArquivo(dados) {
 
+        await writeFileAsync(this.NOME_ARQUIVO, JSON.stringify(dados))
+        return true
+    }
+
+    async cadastra(heroi){
+        const dados = await this.obterDadsArquivo()
+        const id = heroi.id <= 2 ? heroi.id : Date.now();
+        /**
+         * {
+         *  nome: Flash
+         *  poder: Velocidade
+         * }
+         * 
+         * {
+         *  id: 12334??
+         * }
+         * 
+         * {
+         *  nome:flesh
+         * poder: Velocidade
+         * id: 1234??
+         * }
+         */
+        const heroiComId = {
+            id, 
+            ...heroi
+        }
+
+        const dadosFinal = [
+            ...dados,
+            heroiComId
+        ]
+
+        /**
+         * [{
+         *  nome: flash
+         * }]
+         * 
+         * {
+         *  nome: Batman
+         * }
+         * 
+         * [{
+         * nome: Flash
+         * },
+         * {
+         *  nome: Batman
+         * }
+         * ]
+         *  */ 
+
+         const resultado = await this.escreverArquivo(dadosFinal)
+         return resultado;
     }
 
     async listar(id) {
